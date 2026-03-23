@@ -1,104 +1,165 @@
-import { FC, useState } from "react"
-import { Text, TouchableOpacity, View } from "react-native"
-import Background from "../components/Background"
-import { styles } from "./styles/signin-screen-styles"
-import Logo from "../components/Logo"
-import TextInput from "../components/TextInput"
-import Button from "../components/Button"
-import { ITextInput } from "../types/text-input"
+import React, { FC, useState } from 'react';
+import {
+    ActivityIndicator,
+    ScrollView,
+    Switch,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import Background from '../components/Background';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button';
+import { useAuth } from '../contexts/auth-context';
+import { ITextInput } from '../types/text-input';
+import { styles } from './styles/signin-screen-styles';
 
 interface ISignInScreen {
-    navigation: any
+    navigation: any;
 }
 
-export const SignInScreen: FC<ISignInScreen> = ({ navigation }: any) => {
+export const SignInScreen: FC<ISignInScreen> = ({ navigation }) => {
+    const { login, loading, error } = useAuth();
+    const [username, setUsername] = useState<ITextInput>({ value: 'johndoe', error: '' });
+    const [password, setPassword] = useState<ITextInput>({ value: 'password', error: '' });
+    const [useBiometric, setUseBiometric] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
 
-    const [email, setEmail] = useState<ITextInput>({
-        value: 'eve.holt@reqres.in',
-        error: '',
-    });
-    const [password, setPassword] = useState<ITextInput>({
-        value: 'cityslicka',
-        error: '',
-    });
+    const validate = () => {
+        let valid = true;
+        if (!username.value.trim()) {
+            setUsername((prev) => ({ ...prev, error: 'Username is required' }));
+            valid = false;
+        }
+        if (!password.value.trim()) {
+            setPassword((prev) => ({ ...prev, error: 'Password is required' }));
+            valid = false;
+        }
+        return valid;
+    };
 
-    function onPressSignIn() {
-        console.log('On Press Sign In Button')
-        console.log(email)
-        console.log(password)
-        //TODO Handle calling api with email and password
-        navigation.navigate('Home');
-    }
+    const onSubmit = async () => {
+        if (!validate()) return;
+        setSubmitting(true);
+        try {
+            await login(username.value.trim(), password.value);
+            navigation.replace('Main');
+            console.log("dang nhap")
+        } catch (e) {
+            console.log("loi")
+            // error state handled in context
+        } finally {
+
+            setSubmitting(false);
+        }
+    };
 
     return (
         <Background>
-            <View style={{ width: '100%', height: '100%', padding: 20, flex: 1, flexDirection: 'column' }}>
-                <View style={{ alignContent: 'center', flex: 0.2 }}>
-                    <View style={styles.changeLanguageContent}>
-                        <Text
-                            style={styles.languageItem}
-                            onPress={() => {
-                                console.log('press language');
-                                // console.log(i18n);
-                                // i18n.changeLanguage('en');
-                            }}>
-                            English
-                        </Text>
-                        <Text
-                            style={styles.languageItem}
-                            onPress={() => {
-                                // i18n.changeLanguage('vi');
-                            }}>
-                            Tiếng Việt
-                        </Text>
-                    </View>
-                </View>
-                <View style={{ alignContent: 'center', flex: 0.5 }}>
-                    <Logo />
-                    <TextInput
-                        placeholder={'Email'}
-                        returnKeyType="next"
-                        value={email.value}
-                        onChangeText={(text: string) => setEmail({ value: text, error: '' })}
-                        error={!!email.error}
-                        errorText={email.error}
-                        autoCapitalize="none"
-                        autoCompleteType="email"
-                        textContentType="emailAddress"
-                        keyboardType="email-address"
-                    />
-                    <TextInput
-                        placeholder={'Password'}
-                        returnKeyType="done"
-                        value={password.value}
-                        onChangeText={(text: string) => setPassword({ value: text, error: '' })}
-                        error={!!password.error}
-                        errorText={password.error}
-                        secureTextEntry
-                    />
-                    <View style={styles.forgotPassword}>
-                        <TouchableOpacity
-                            onPress={() => navigation.replace('ForgotPasswordScreen')}>
-                            <Text style={styles.forgot}>{'Forgot your password?'}</Text>
+            <View style={styles.screen}>
+                <ScrollView
+                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scroll}
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
+                    bounces={false}
+                >
+                    <View style={styles.card}>
+                        <View style={styles.iconCircle}>
+                            <Text style={styles.iconLock}>Lock</Text>
+                        </View>
+                        <Text style={styles.title}>Welcome Back</Text>
+                        <Text style={styles.subtitle}>Please enter your details</Text>
+
+                        <View style={styles.segment}>
+                            <TouchableOpacity style={[styles.segmentButton, styles.segmentActive]}>
+                                <Text style={styles.segmentActiveText}>Login</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.segmentButton}>
+                                <Text style={styles.segmentText}>Sign Up</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={styles.label}>Username</Text>
+                        <TextInput
+                            placeholder="johndoe123"
+                            value={username.value}
+                            onChangeText={(text: string) => setUsername({ value: text, error: '' })}
+                            autoCapitalize="none"
+                            returnKeyType="next"
+                            error={!!username.error}
+                            errorText={username.error}
+                        />
+
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            placeholder="********"
+                            value={password.value}
+                            onChangeText={(text: string) => setPassword({ value: text, error: '' })}
+                            secureTextEntry
+                            returnKeyType="done"
+                            error={!!password.error}
+                            errorText={password.error}
+                        />
+
+                        <View style={styles.forgotPasswordRow}>
+                            <TouchableOpacity>
+                                <Text style={styles.link}>Forgot Password?</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.biometricRow}>
+                            <Switch
+                                value={useBiometric}
+                                onValueChange={setUseBiometric}
+                                thumbColor={useBiometric ? '#0CD1E8' : '#f4f3f4'}
+                                trackColor={{ true: '#8CF1FF', false: '#dcdcdc' }}
+                            />
+                            <Text style={styles.biometricText}>Use biometrics for faster login</Text>
+                        </View>
+
+                        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+                        <Button
+                            style={styles.primaryButton}
+                            disabled={loading || submitting}
+                            onPress={onSubmit}
+                        >
+                            {loading || submitting ? (
+                                <ActivityIndicator color="white" />
+                            ) : (
+                                <Text style={styles.primaryButtonText}>Sign In</Text>
+                            )}
+                        </Button>
+
+                        <TouchableOpacity style={styles.outlineButton}>
+                            <Text style={styles.outlineButtonText}>Sign in with Biometrics</Text>
                         </TouchableOpacity>
+
+                        <View style={styles.dividerRow}>
+                            <View style={styles.divider} />
+                            <Text style={styles.dividerText}>Or continue with</Text>
+                            <View style={styles.divider} />
+                        </View>
+
+                        <View style={styles.socialRow}>
+                            <TouchableOpacity style={styles.socialButton}>
+                                <Text style={styles.socialIcon}>G</Text>
+                                <Text style={styles.socialText}>Google</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.socialButton}>
+                                <Text style={styles.socialIcon}>f</Text>
+                                <Text style={styles.socialText}>Facebook</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={styles.footerText}>
+                            By continuing, you agree to our <Text style={styles.link}>Terms of Service</Text>{' '}
+                            and <Text style={styles.link}>Privacy Policy</Text>.
+                        </Text>
                     </View>
-                    <Button
-                        mode="contained"
-                        onPress={() => {
-                            onPressSignIn();
-                        }}>
-                        <Text>{'Login'}</Text>
-                    </Button>
-                    <View style={styles.row}>
-                        <Text>{'Don’t have an account?'} </Text>
-                        <TouchableOpacity onPress={() => navigation.replace('SignUpScreen')}>
-                            <Text style={styles.link}>{'Sign up'}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{ alignContent: 'center', flex: 0.2 }}>
-                </View>
+                </ScrollView>
             </View>
         </Background>
-    )
-}
+    );
+};

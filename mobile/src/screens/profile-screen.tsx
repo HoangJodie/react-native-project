@@ -26,7 +26,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                         <Text>Log out</Text>
                     </Button>
                     </View>
-                    
                 </>
             ) : (
                 <>

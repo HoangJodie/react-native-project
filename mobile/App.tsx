@@ -1,15 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, View } from 'react-native';
-import { DemoScreen } from './src/screens/demo-screen';
-import { ProfileScreen } from './src/screens/profile-screen';
 import { SignInScreen } from './src/screens/signin-screen';
-import DemoHooks from './src/screens/demo/demo-hooks';
-import DemoUseContext, { FeatureComponent2 } from './src/screens/demo/demo-usecontext';
-import { AuthProvider } from './src/contexts/auth-context';
-import { HomeScreen } from './src/screens/home-screen';
+import { AuthProvider, useAuth } from './src/contexts/auth-context';
 import MainNavigator from './src/screens/navigator/main-navigator';
-import ListScreen from './src/screens/list-screen';
 import { Provider } from 'react-redux';
 import store from './src/stores/store';
 
@@ -27,29 +20,21 @@ const App = () => {
 };
 
 const AppContent: React.FC = () => {
+  const { user } = useAuth();
+  const initialRouteName = user ? 'Main' : 'SignIn';
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen
-          name="List"
-          component={ListScreen}
-          options={{ title: 'List Screen' }}
-        /> */}
-        <Stack.Screen
-          name="Main"
-          component={MainNavigator}
-          options={{ title: 'ReactNativeStater' }}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRouteName}>
         <Stack.Screen
           name="SignIn"
           component={SignInScreen}
-          options={{ title: 'SignIn Screen' }}
+          options={{ title: 'Sign In' }}
         />
-        {/* <Stack.Screen
-          name="Demo"
-          component={DemoUseContext}
-          options={{ title: 'Demo Screen' }}
-        /> */}
+        <Stack.Screen
+          name="Main"
+          component={MainNavigator}
+          options={{ title: 'ReactNativeStarter' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -1,13 +1,23 @@
 import React from 'react';
-import { View, Text, TextInput as Input, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { View, Text, TextInput as Input, StyleSheet, TextStyle, ViewStyle, StyleProp } from 'react-native';
 
-export default function TextInput({ errorText, description, ...props }: any) {
+type Props = {
+    errorText?: string;
+    description?: string;
+    style?: StyleProp<TextStyle>;
+} & React.ComponentProps<typeof Input>;
+
+export default function TextInput({ errorText, description, style, ...props }: Props) {
     return (
         <View style={styles.container}>
-            <Input style={styles.input} underlineColor="transparent" {...props} />
-            {description && !errorText ? (
-                <Text style={styles.description}>{description}</Text>
-            ) : null}
+            <Input
+                style={[styles.input, style]}
+                placeholderTextColor="#94A3B8"
+                selectionColor="#0CD1E8"
+                underlineColorAndroid="transparent"
+                {...props}
+            />
+            {description && !errorText ? <Text style={styles.description}>{description}</Text> : null}
             {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
         </View>
     );
@@ -15,8 +25,8 @@ export default function TextInput({ errorText, description, ...props }: any) {
 
 type ITexInputStyles = {
     container: ViewStyle;
-    input: ViewStyle;
-    description: TextStyle
+    input: TextStyle;
+    description: TextStyle;
     error: TextStyle;
 };
 
@@ -26,20 +36,23 @@ const styles = StyleSheet.create<ITexInputStyles>({
         marginVertical: 12,
     },
     input: {
-        backgroundColor: 'white',
-        borderColor: 'gray',
-        paddingVertical: 10,
+        backgroundColor: '#FFFFFF',
+        borderColor: '#CBD5E1',
+        borderWidth: 1.25,
+        paddingVertical: 12,
         paddingHorizontal: 16,
         borderRadius: 10,
+        color: '#0F172A',
+        fontSize: 15,
     },
     description: {
         fontSize: 13,
-        color: 'gray',
-        paddingTop: 8,
+        color: '#6B7280',
+        paddingTop: 6,
     },
     error: {
         fontSize: 13,
-        color: 'gray',
-        paddingTop: 8,
+        color: '#EF4444',
+        paddingTop: 6,
     },
 });

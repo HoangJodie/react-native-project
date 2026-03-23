@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from '../thunks/app-thunk';
-import { apiService } from '../services/api-service';
+import { apiService } from '../services/apiClient';
 
 interface Photo {
     albumId: number;
