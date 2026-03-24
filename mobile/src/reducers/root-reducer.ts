@@ -1,8 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import apiReducer from '../slices/api-slice';
+import { productReducer as apiReducer, filterReducer } from '../features/product/slice';
+import { authReducer } from '../features/auth/slice';
 
 const rootReducer = combineReducers({
     api: apiReducer,
+    filters: filterReducer,
+    auth: authReducer,
 });
 
 export default rootReducer;
