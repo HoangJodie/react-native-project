@@ -1,6 +1,6 @@
 
 import { configureStore, Middleware } from '@reduxjs/toolkit';
-import rootReducer, { RootState } from '../reducers/root-reducer';
+import rootReducer, { RootState } from './root-reducer';
 import logger from 'redux-logger';
 
 const store = configureStore({
