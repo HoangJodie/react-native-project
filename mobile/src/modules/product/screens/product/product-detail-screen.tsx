@@ -5,7 +5,7 @@ import TopBar from '../../../../shared/components/TopBar';
 import { detailStyles as styles } from './product-detail.styles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ShopStackParamList } from '../../../../app/navigation/types';
-import { useProductDetail } from '../../queries';
+import { useProductDetail } from '../../hooks/useProductDetail';
 import { ProductReview } from '../../type';
 
 type Props = NativeStackScreenProps<ShopStackParamList, 'ProductDetail'>;

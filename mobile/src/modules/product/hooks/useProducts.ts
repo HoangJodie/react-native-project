@@ -7,7 +7,7 @@ import { setPriceUnit, setSearchTerm } from '../slice';
 
 export const useProducts = () => {
     const dispatch = useAppDispatch();
-    const { searchTerm, priceUnit } = useAppSelector((state) => state.filters);
+    const { searchTerm, priceUnit } = useAppSelector((state) => state.productFilters);
 
     const query = useQuery({
         queryKey: ['products', { searchTerm, priceUnit }],
@@ -30,7 +30,9 @@ export const useProducts = () => {
     return useMemo(
         () => ({
             items: query.data ?? [],
-            loading: query.isLoading || query.isFetching,
+            loading: query.isLoading,
+            fetching: query.isFetching,
+            refreshing: query.isRefetching,
             error: query.isError ? 'Unable to load products. Please try again.' : null,
             searchTerm,
             priceUnit,
@@ -47,7 +49,10 @@ export const useProducts = () => {
             priceUnit,
             handleSearch,
             handlePriceUnit,
+            query.isRefetching,
             query.refetch,
         ]
     );
 };
+
+export default useProducts;

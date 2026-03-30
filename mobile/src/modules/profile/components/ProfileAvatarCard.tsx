@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { AuthUser } from '../../auth/type';
+import type { Profile } from '../types';
 
 type Props = {
-    user: AuthUser & { avatar?: string };
+    user: Profile;
 };
 
 const ProfileAvatarCard: React.FC<Props> = ({ user }) => {

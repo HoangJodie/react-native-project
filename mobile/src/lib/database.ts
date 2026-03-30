@@ -6,7 +6,7 @@ const DB_NAME = 'app.db';
 const DB_LOCATION = 'default';
 const PROFILE_TABLE = 'user_profile';
 
-export type UserProfileRecord = {
+export type StoredProfile = {
     id: number;
     username: string;
     email?: string | null;
@@ -22,7 +22,7 @@ export type UserProfileRecord = {
 
 let dbInstance: SQLiteDatabase | null = null;
 
-const mapRowToProfile = (row: Record<string, unknown>): UserProfileRecord => {
+const mapRowToProfile = (row: Record<string, unknown>): StoredProfile => {
     const getString = (key: string): string | null => {
         const value = row[key];
         return typeof value === 'string' ? value : value == null ? null : String(value);
@@ -110,7 +110,7 @@ export const initDatabase = async (): Promise<SQLiteDatabase> => {
     return getDatabase();
 };
 
-export const saveUserProfile = async (profile: Omit<UserProfileRecord, 'pendingSync'>, pending = false): Promise<void> => {
+export const saveUserProfile = async (profile: Omit<StoredProfile, 'pendingSync'>, pending = false): Promise<void> => {
     const db = await getDatabase();
     const updatedAt = profile.updatedAt ?? new Date().toISOString();
     await db.executeSql(
@@ -133,7 +133,7 @@ export const saveUserProfile = async (profile: Omit<UserProfileRecord, 'pendingS
     );
 };
 
-export const getUserProfile = async (): Promise<UserProfileRecord | null> => {
+export const getUserProfile = async (): Promise<StoredProfile | null> => {
     const db = await getDatabase();
     const [result] = await db.executeSql(`SELECT * FROM ${PROFILE_TABLE} LIMIT 1`);
     if (!result.rows.length) {
@@ -142,10 +142,10 @@ export const getUserProfile = async (): Promise<UserProfileRecord | null> => {
     return mapRowToProfile(result.rows.item(0));
 };
 
-export const getPendingProfiles = async (): Promise<UserProfileRecord[]> => {
+export const getPendingProfiles = async (): Promise<StoredProfile[]> => {
     const db = await getDatabase();
     const [result] = await db.executeSql(`SELECT * FROM ${PROFILE_TABLE} WHERE pending_sync = 1`);
-    const profiles: UserProfileRecord[] = [];
+    const profiles: StoredProfile[] = [];
     for (let i = 0; i < result.rows.length; i += 1) {
         profiles.push(mapRowToProfile(result.rows.item(i)));
     }

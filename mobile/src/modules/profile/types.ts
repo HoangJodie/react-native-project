@@ -1,10 +1,27 @@
-import type { UserProfileRecord } from '../../lib/database';
+export interface ProfileBase {
+    id: number;
+    username: string;
+    email?: string | null;
+    age?: number | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    avatar?: string | null;
+    phone?: string | null;
+    address?: string | null;
+    updatedAt?: string | null;
+}
 
-export type Profile = UserProfileRecord;
+// Domain model used in UI/state. pendingSync is client-only.
+export interface Profile extends ProfileBase {
+    pendingSync?: boolean;
+}
 
-export type UpdateProfileInput = Partial<
-    Pick<Profile, 'email' | 'firstName' | 'lastName' | 'age'>
->;
+// Record shape stored in SQLite cache.
+export interface StoredProfile extends ProfileBase {
+    pendingSync: boolean;
+}
+
+export type UpdateProfileInput = Partial<Pick<Profile, 'email' | 'firstName' | 'lastName' | 'age' | 'avatar'>>;
 
 export interface ProfileState {
     profile: Profile | null;

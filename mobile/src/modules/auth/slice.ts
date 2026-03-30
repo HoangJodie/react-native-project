@@ -118,7 +118,6 @@ const authSlice = createSlice({
             state.accessToken = null;
             state.initialized = false;
             state.user = null;
-            Keychain.resetGenericPassword();
         },
     },
     extraReducers: (builder) => {

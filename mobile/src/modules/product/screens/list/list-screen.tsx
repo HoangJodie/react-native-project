@@ -1,14 +1,14 @@
 // components/ApiList.tsx
 import React from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
-import useApiData from '../../hooks/use-api-data';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { useProducts } from '../../hooks/useProducts';
 import ListItem from '../../../../shared/components/ListItem';
 import { useAuth } from '../../../auth/useAuth';
 import Button from '../../../../shared/components/Button';
 
 const ListScreen: React.FC = () => {
-    const { apiData, loading, error } = useApiData();
-    const { user, login, logout } = useAuth();
+    const { items, loading, error } = useProducts();
+    const { user, login } = useAuth();
 
     return (
 
@@ -22,7 +22,7 @@ const ListScreen: React.FC = () => {
                             <Text>Error: {error}</Text>
                         ) : (
                             <FlatList
-                                data={apiData}
+                                data={items}
                                 keyExtractor={(item) => String(item.id)}
                                 renderItem={({ item }) => (
                                     <ListItem
@@ -49,13 +49,6 @@ const ListScreen: React.FC = () => {
 
     );
 };
-
-const styles = StyleSheet.create({
-    listItem: {
-        borderBottomWidth: 1,
-        padding: 10,
-    },
-});
 
 export default ListScreen;
 

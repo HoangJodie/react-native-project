@@ -7,7 +7,7 @@ import {
 } from '../../lib/database';
 import { getProfile, updateProfile } from './api';
 import { updateProfileSchema } from './schema';
-import type { Profile, ProfileState, UpdateProfileInput, UpdateProfileResult } from './types';
+import type { Profile, ProfileState, StoredProfile, UpdateProfileInput, UpdateProfileResult } from './types';
 import type { RootState } from '../../app/root-reducer';
 import { logout, logoutAsync } from '../auth/slice';
 
@@ -25,19 +25,23 @@ const toSavableProfile = (profile: Profile) => {
     return rest;
 };
 
+const fromStoredProfile = (record: StoredProfile): Profile => ({
+    ...record,
+});
+
 export const fetchProfile = createAsyncThunk<Profile | null, void, { state: RootState; rejectValue: string }>(
     'profile/fetchProfile',
     async (_, { dispatch, rejectWithValue }) => {
         try {
             const localProfile = await getUserProfile();
             if (localProfile) {
-                dispatch(setProfile(localProfile));
+                dispatch(setProfile(fromStoredProfile(localProfile)));
             }
 
             const remoteProfile = await getProfile();
 
             if (!remoteProfile) {
-                return localProfile;
+                return localProfile ? fromStoredProfile(localProfile) : null;
             }
 
             const normalizedRemote: Profile = { ...remoteProfile, pendingSync: false };
@@ -53,7 +57,7 @@ export const fetchProfile = createAsyncThunk<Profile | null, void, { state: Root
                 return normalizedRemote;
             }
 
-            return localProfile;
+            return localProfile ? fromStoredProfile(localProfile) : null;
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Failed to fetch profile';
             return rejectWithValue(message);
@@ -72,7 +76,8 @@ export const updateUserProfile = createAsyncThunk<
     }
 
     const state = getState();
-    const existingProfile = state.profile.profile ?? (await getUserProfile());
+    const storedProfile = await getUserProfile();
+    const existingProfile = state.profile.profile ?? (storedProfile ? fromStoredProfile(storedProfile) : null);
     if (!existingProfile) {
         return rejectWithValue('Profile is not loaded');
     }
@@ -92,7 +97,7 @@ export const updateUserProfile = createAsyncThunk<
         const remoteProfile = await updateProfile(parsed.data);
         const normalized: Profile = { ...remoteProfile, pendingSync: false };
         await saveUserProfile(toSavableProfile(normalized), false);
-        await markAsSynced(normalized.id, normalized.updatedAt);
+        await markAsSynced(normalized.id, normalized.updatedAt ?? undefined);
         return { profile: normalized, synced: true };
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to update profile';

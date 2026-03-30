@@ -5,12 +5,14 @@ import logger from 'redux-logger';
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      immutableCheck: false,
-      serializableCheck: false,
-    }).concat(logger as Middleware),
-  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => {
+    const middleware = getDefaultMiddleware();
+    if (__DEV__) {
+      middleware.push(logger as Middleware);
+    }
+    return middleware;
+  },
+  devTools: __DEV__,
 });
 
 export type AppDispatch = typeof store.dispatch;

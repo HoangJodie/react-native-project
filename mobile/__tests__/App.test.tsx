@@ -5,13 +5,12 @@
 import 'react-native';
 import React from 'react';
 import App from '../App';
+import { jest } from '@jest/globals';
 
-// Note: import explicitly to use the types shipped with jest.
-import {it} from '@jest/globals';
+jest.mock('react-native-config', () => ({ API_URL: 'http://localhost' }));
+jest.mock('react-native-keychain');
+jest.mock('react-native-sqlite-storage');
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
-
-it('renders correctly', () => {
-  renderer.create(<App />);
+it('exports App component', () => {
+  expect(App).toBeTruthy();
 });

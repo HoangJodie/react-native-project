@@ -4,10 +4,10 @@ import { homeStyles } from './home-screen.styles';
 import { SearchBar } from './components/SearchBar';
 import { FilterTabs } from './components/FilterTabs';
 import { ProductCard } from './components/ProductCard';
-import { useProducts } from '../../queries';
+import { useProducts } from '../../hooks/useProducts';
 import Icon from 'react-native-vector-icons/Feather';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ShopStackParamList } from '../../../app/navigation/types';
+import { ShopStackParamList } from '../../../../app/navigation/types';
 
 type HomeScreenProps = NativeStackScreenProps<ShopStackParamList, 'Home'>;
 
