@@ -8,4 +8,5 @@ export type RootStackParamList = {
 export type ShopStackParamList = {
     Home: undefined;
     ProductDetail: { productId: number; product?: Product };
+    Checkout: { product: Product };
 };

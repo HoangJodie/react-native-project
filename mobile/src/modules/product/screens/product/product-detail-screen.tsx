@@ -45,7 +45,8 @@ const ProductDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     };
 
     const handleBuy = () => {
-        Alert.alert('Buy Now', 'Checkout flow is not wired yet in this demo.');
+        if (!displayProduct) return;
+        navigation.navigate('Checkout', { product: displayProduct });
     };
 
     if (!displayProduct || productLoading) {

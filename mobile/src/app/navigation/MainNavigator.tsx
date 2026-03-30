@@ -35,7 +35,7 @@ const MainNavigator: React.FC = () => {
                 component={ShopStack}
                 options={({ route }) => {
                     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
-                    const hideTab = routeName === 'ProductDetail';
+                    const hideTab = routeName === 'ProductDetail' || routeName === 'Checkout';
                     return {
                         tabBarLabel: 'Shop',
                         tabBarIcon: ({ color }) => <Icon name="home" size={24} color={color} />,
