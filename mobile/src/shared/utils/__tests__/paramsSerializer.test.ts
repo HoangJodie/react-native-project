@@ -1,4 +1,4 @@
-import { paramsSerializer } from '../paramsSerializer';
+import { paramsSerializer } from '../platform/paramsSerializer';
 
 describe('paramsSerializer', () => {
     it('serializes primitives and arrays and skips empty/undefined', () => {

@@ -1,4 +1,4 @@
-import type { Product } from '../../modules/product/type';
+import type { Product } from '../../features/product/type';
 
 export type RootStackParamList = {
     SignIn: undefined;

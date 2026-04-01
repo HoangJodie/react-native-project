@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { paramsSerializer } from '../utils/paramsSerializer';
+import { paramsSerializer } from '../utils/platform/paramsSerializer';
 import Config from 'react-native-config';
 import * as Keychain from 'react-native-keychain';
 

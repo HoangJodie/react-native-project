@@ -12,10 +12,10 @@ jest.mock('@react-navigation/native-stack', () => {
     };
 });
 
-jest.mock('../../../modules/product/screens/home/home-screen', () => ({
+jest.mock('../../../features/product/screens/home/home-screen', () => ({
     HomeScreen: () => null,
 }));
-jest.mock('../../../modules/product/screens/product/product-detail-screen', () => ({
+jest.mock('../../../features/product/screens/product/product-detail-screen', () => ({
     ProductDetailScreen: () => null,
 }));
 

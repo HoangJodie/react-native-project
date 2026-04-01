@@ -1,8 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from '../../modules/product/screens/home/home-screen';
-import { ProductDetailScreen } from '../../modules/product/screens/product/product-detail-screen';
-import { CheckoutScreen } from '../../modules/checkout/screens/checkout/checkout-screen';
+import { HomeScreen } from '../../features/product/screens/home/home-screen';
+import { ProductDetailScreen } from '../../features/product/screens/product/product-detail-screen';
+import { CheckoutScreen } from '../../features/checkout/screens/checkout/checkout-screen';
 import { ShopStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<ShopStackParamList>();

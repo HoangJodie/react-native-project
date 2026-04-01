@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import ShopStack from './ShopStack';
-import { ProfileScreen } from '../../modules/profile/screens/profile-screen';
-import CategoriesScreen from '../../modules/product/screens/categories/categories-screen';
-import SavedScreen from '../../modules/product/screens/saved/saved-screen';
+import { ProfileScreen } from '../../features/profile/screens/profile-screen';
+import CategoriesScreen from '../../features/product/screens/categories/categories-screen';
+import SavedScreen from '../../features/product/screens/saved/saved-screen';
 
 const Tab = createBottomTabNavigator();
 

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, View } from 'react-native';
-import { SignInScreen } from '../../modules/auth/screens/signin/signin-screen';
+import { SignInScreen } from '../../features/auth/screens/signin/signin-screen';
 import MainNavigator from './MainNavigator';
-import { useAuth } from '../../modules/auth/useAuth';
+import { useAuth } from '../../features/auth/hooks/useAuth';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

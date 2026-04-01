@@ -1,4 +1,4 @@
-import { paramsSerializer } from '../../utils/paramsSerializer';
+import { paramsSerializer } from '../../utils/platform/paramsSerializer';
 
 const mockRequestInterceptor: { handler?: (config: any) => any } = {};
 const mockResponseInterceptor: { success?: (resp: any) => any; error?: (err: any) => any } = {};

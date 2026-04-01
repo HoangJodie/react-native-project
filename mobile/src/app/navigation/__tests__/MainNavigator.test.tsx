@@ -16,11 +16,11 @@ jest.mock('@react-navigation/native', () => ({
     getFocusedRouteNameFromRoute: jest.fn(() => 'Home'),
 }));
 
-jest.mock('../../../modules/profile/screens/profile-screen', () => ({
+jest.mock('../../../features/profile/screens/profile-screen', () => ({
     ProfileScreen: () => null,
 }));
-jest.mock('../../../modules/product/screens/categories/categories-screen', () => () => null);
-jest.mock('../../../modules/product/screens/saved/saved-screen', () => () => null);
+jest.mock('../../../features/product/screens/categories/categories-screen', () => () => null);
+jest.mock('../../../features/product/screens/saved/saved-screen', () => () => null);
 jest.mock('../ShopStack', () => () => null);
 jest.mock('react-native-vector-icons/Feather', () => 'Icon');
 

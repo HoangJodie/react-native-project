@@ -2,17 +2,17 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import AppNavigator from '../AppNavigator';
 
-jest.mock('../../../modules/auth/useAuth', () => ({
+jest.mock('../../../features/auth/hooks/useAuth', () => ({
     useAuth: jest.fn(),
 }));
 
-jest.mock('../../../modules/auth/screens/signin/signin-screen', () => ({
+jest.mock('../../../features/auth/screens/signin/signin-screen', () => ({
     SignInScreen: () => <></>,
 }));
 
 jest.mock('../MainNavigator', () => () => <></>);
 
-const useAuth = require('../../../modules/auth/useAuth').useAuth as jest.Mock;
+const useAuth = require('../../../features/auth/hooks/useAuth').useAuth as jest.Mock;
 
 describe('AppNavigator', () => {
     it('shows loader when not initialized', () => {
