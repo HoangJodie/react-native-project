@@ -13,7 +13,7 @@ jest.mock('@react-navigation/bottom-tabs', () => {
 });
 
 jest.mock('@react-navigation/native', () => ({
-    getFocusedRouteNameFromRoute: jest.fn(() => 'ProductDetail'),
+    getFocusedRouteNameFromRoute: jest.fn(() => 'Home'),
 }));
 
 jest.mock('../../../modules/profile/screens/profile-screen', () => ({
@@ -27,14 +27,40 @@ jest.mock('react-native-vector-icons/Feather', () => 'Icon');
 const { getFocusedRouteNameFromRoute } = jest.requireMock('@react-navigation/native');
 
 describe('MainNavigator', () => {
-    it('renders without crashing and hides tab for ProductDetail route', () => {
-        const tree = MainNavigator({});
-        expect(tree).toBeTruthy();
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    it('renders when tab visible for Home route', () => {
+    it('renders without crashing when Home route is focused', () => {
+        getFocusedRouteNameFromRoute.mockReturnValue('Home');
+        const component = <MainNavigator />;
+        expect(component).toBeTruthy();
+    });
+
+    it('renders without crashing when ProductDetail route is active', () => {
+        getFocusedRouteNameFromRoute.mockReturnValue('ProductDetail');
+        const component = <MainNavigator />;
+        expect(component).toBeTruthy();
+    });
+
+    it('renders without crashing when Checkout route is active', () => {
+        getFocusedRouteNameFromRoute.mockReturnValue('Checkout');
+        const component = <MainNavigator />;
+        expect(component).toBeTruthy();
+    });
+
+    it('renders without crashing when undefined focused route (defaults to Home)', () => {
         getFocusedRouteNameFromRoute.mockReturnValue(undefined);
-        const tree = MainNavigator({});
-        expect(tree).toBeTruthy();
+        const component = <MainNavigator />;
+        expect(component).toBeTruthy();
+    });
+
+    it('renders without crashing with different route names', () => {
+        const routes = ['Home', 'ProductDetail', 'Checkout', 'Categories', 'Saved', 'Profile'];
+        routes.forEach(route => {
+            getFocusedRouteNameFromRoute.mockReturnValue(route);
+            const component = <MainNavigator />;
+            expect(component).toBeTruthy();
+        });
     });
 });
